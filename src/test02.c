@@ -9,32 +9,49 @@
  */
 
 #include <stdlib.h>
+#include <conio.h>
 #include <curses.h>
+#include <sys/time.h>
+#include <stdio.h>
+
+
+void init();
 
 int main(void)
 {
-	char ch,*c1 = "See Me, See Me!";
+	char ch,*timeStr, *c1 = "\"Press z\" to Quit.";
 	time_t currentTime;
-	char *timeStr;
 
 	init();
 	start_color();
 	init_pair(1,COLOR_GREEN,COLOR_BLACK);
-	attron(COLOR_PAIR(1));
+	init_pair(2,COLOR_CYAN,COLOR_BLACK);
 
+	//Draw some hints,borders.
+	timeStr = asctime(localtime(&currentTime));
+	attron(COLOR_PAIR(2));
+	mvprintw(LINES -1, COLS - strlen(c1) -20 , c1);
+//	mvprintw(LINES /2 -5,(COLS - strlen(timeStr)) /2 -5, ' ');
+	vline('*',10);
+	attroff(COLOR_PAIR(2));
+
+	//Draw Time String.
+	attron(COLOR_PAIR(1));
 	while (1) {
 		currentTime = time(NULL);
 		timeStr = asctime(localtime(&currentTime));
+
 		mvprintw(LINES /2, (COLS - strlen(timeStr)) /2, timeStr);
 		refresh();
-		sleep(1);
+//		sleep(1);
 
-		ch = getch();
-		if (ch =='z' || ch == ' ') {
-			endwin();
-			return 0;
+		if (kbhit()) {
+			ch = getch();
+			if (ch =='z' || ch == ' ') {
+				endwin();
+				return 0;
+			}
 		}
-		refresh();
 	} ;
 
 
@@ -61,3 +78,4 @@ void init()
 	curs_set(0);
 
 }
+
