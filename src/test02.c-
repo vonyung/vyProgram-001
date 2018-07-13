@@ -22,20 +22,34 @@ int main(void)
 	char ch,*timeStr, *c1 = "\"Press z\" to Quit.";
 	time_t currentTime;
 
+	/*
+	 * 	Do some initialize job, set initialize value.
+	 */
 	init();
 	start_color();
 	init_pair(1,COLOR_GREEN,COLOR_BLACK);
 	init_pair(2,COLOR_CYAN,COLOR_BLACK);
 
-	//Draw some hints,borders.
+
+	/*
+	 *	Draw some hints,borders.
+	 *	;hints : c1 -> quit
+	 *	;borders: arround
+	 */
 	timeStr = asctime(localtime(&currentTime));
-	attron(COLOR_PAIR(2));
+	attron(COLOR_PAIR(2));											//select color_attribute
 	mvprintw(LINES -1, COLS - strlen(c1) -20 , c1);
 //	mvprintw(LINES /2 -5,(COLS - strlen(timeStr)) /2 -5, ' ');
-	vline('*',10);
+//	mvvline(LINES /2 -2, COLS /2 - 20,ACS_VLINE,5);				//draw left line
+	mvvline(LINES /2 -2, COLS /2 + 20,ACS_VLINE,5);				//draw right line
+//	border(ACS_VLINE,ACS_VLINE,ACS_HLINE,ACS_HLINE,ACS_ULCORNER,ACS_URCORNER,ACS_LLCORNER,ACS_LRCORNER);
+
 	attroff(COLOR_PAIR(2));
 
-	//Draw Time String.
+
+	/*
+	 *	Draw Time String.
+	 */
 	attron(COLOR_PAIR(1));
 	while (1) {
 		currentTime = time(NULL);
@@ -43,7 +57,7 @@ int main(void)
 
 		mvprintw(LINES /2, (COLS - strlen(timeStr)) /2, timeStr);
 		refresh();
-//		sleep(1);
+//		sleep(1);													//wait 1 second
 
 		if (kbhit()) {
 			ch = getch();
@@ -53,12 +67,14 @@ int main(void)
 			}
 		}
 	} ;
-
-
-
 	attroff(COLOR_PAIR(1));
 	refresh();
 
+
+
+	/*
+	 * 	Test something.
+	 */
 	int i1 = getch();
 	printf("%d",i1);
 
